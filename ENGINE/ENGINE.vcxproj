@@ -140,6 +140,7 @@
     <ClCompile Include="Src\Bone.cpp" />
     <ClCompile Include="Src\Buffers.cpp" />
     <ClCompile Include="Src\Camera.cpp" />
+    <ClCompile Include="Src\DiscordRichPresence.cpp" />
     <ClCompile Include="Src\Editor\UI\Console.cpp" />
     <ClCompile Include="Src\Editor\ImguiWindow.cpp" />
     <ClCompile Include="Src\Editor\UI\EditorUI.cpp" />
