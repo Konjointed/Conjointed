@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\DiscordRichPresence.cpp" />
     <ClCompile Include="Src\Animation.cpp" />
     <ClCompile Include="Src\Animator.cpp" />
     <ClCompile Include="Src\Application.cpp" />
