@@ -53,5 +53,7 @@ void InitScene(Scene* scene) {
 }
 
 void UpdateScene(Scene* scene, float deltaTime) {
-	scene->camera->Update(deltaTime);
+	if (Viewport::FOCUSED) {
+		scene->camera->Update(deltaTime);
+	}
 }

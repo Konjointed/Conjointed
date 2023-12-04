@@ -4,6 +4,7 @@
 
 float Viewport::VIEWPORT_WIDTH = 1280.0f;
 float Viewport::VIEWPORT_HEIGHT = 720.0f;
+bool Viewport::FOCUSED = false;
 
 Viewport::Viewport() {}
 Viewport::~Viewport() {}
@@ -19,6 +20,8 @@ void Viewport::Draw(unsigned int textureColorBuffer, Window& window) {
 	ImVec2 uv1 = ImVec2(1.0f, 0.0f);
 
 	ImGui::Image((void*)(intptr_t)textureColorBuffer, size, uv0, uv1);
+
+	Viewport::FOCUSED = ImGui::IsWindowFocused();
 
 	ImGui::End();
 }

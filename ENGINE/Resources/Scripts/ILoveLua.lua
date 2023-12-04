@@ -1,6 +1,11 @@
-local testModule = require("Resources/Scripts/Test")
+local Hero = require("Resources.Scripts.Test")
 
-testModule.DoSomething()
+local HeroObj = Hero.new()
+HeroObj:Ability1()
+HeroObj:Ability2()
+HeroObj:Ability3()
+
+
 
 
 

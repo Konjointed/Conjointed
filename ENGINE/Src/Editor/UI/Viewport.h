@@ -9,6 +9,8 @@ public:
 	// The camera will need to access these values for updating the aspect ratio
 	static float VIEWPORT_WIDTH;
 	static float VIEWPORT_HEIGHT;
+	// Camera also needs to accesses this 
+	static bool FOCUSED;
 
 	Viewport();
 	~Viewport();

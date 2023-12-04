@@ -9,6 +9,7 @@
 discord::Core* core{};
 
 DiscordRichPresence::DiscordRichPresence() {
+	// Load our .env file so that we can get the client id
 	std::map<std::string, std::string> envMap;
 	std::ifstream file("../.env");
 	std::string line;
