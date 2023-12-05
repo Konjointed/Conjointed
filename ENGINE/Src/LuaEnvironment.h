@@ -17,6 +17,8 @@ public:
 		L = luaL_newstate();  // Create a new Lua state
 		luaL_openlibs(L);     // Open all standard Lua libraries
 
+        lua_register(L, "average", average);
+
         // Store 'this' in the Lua registry
         lua_pushlightuserdata(L, this);
         lua_setglobal(L, "LuaEnvironment_instance");
@@ -57,6 +59,30 @@ public:
             std::string error = lua_tostring(L, -1);
             console.AddLog("[Error] " + error); // Replace with your method to add text to the console
         }
+    }
+
+    static int average(lua_State* L)
+    {
+        /* get number of arguments */
+        int n = lua_gettop(L);
+        double sum = 0;
+        int i;
+
+        /* loop through each argument */
+        for (i = 1; i <= n; i++)
+        {
+            /* total the arguments */
+            sum += lua_tonumber(L, i);
+        }
+
+        /* push the average */
+        lua_pushnumber(L, sum / n);
+
+        /* push the sum */
+        lua_pushnumber(L, sum);
+
+        /* return the number of results */
+        return 2;
     }
 private:
 	lua_State* L;
