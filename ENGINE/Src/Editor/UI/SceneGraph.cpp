@@ -16,20 +16,6 @@ void SceneGraph::Draw(Scene& scene) {
 		for (auto& object : scene.sceneObjects) {
 			DisplaySceneGraph(*object);
 		}
-
-		// Right-click on blank space
-		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered()) {
-			ImGui::OpenPopup("SceneGraphContextMenu");
-		}
-
-		// Context menu
-		if (ImGui::BeginPopup("SceneGraphContextMenu")) {
-			if (ImGui::MenuItem("Add Object")) {
-				// Queue command to add object
-			}
-
-			ImGui::EndPopup();
-		}
 	}
 	ImGui::End();
 }
@@ -40,21 +26,24 @@ void SceneGraph::DisplaySceneGraph(GameObject& object) {
 	if (selectedObject == &object) {
 		node_flags |= ImGuiTreeNodeFlags_Selected;
 	}
+
 	bool node_open = ImGui::TreeNodeEx(object.name.c_str(), node_flags);
 	if (ImGui::IsItemClicked()) {
-		std::cout << "setting selected object\n";
 		selectedObject = &object;
 	}
 
-	if (node_open) {
-		/*
-		if (object.children.empty()) {
-			std::cout << "HAS NO CHILDREN\n";
+	// Right-click on the node to open context menu for removal
+	if (ImGui::BeginPopupContextItem()) {
+		if (ImGui::MenuItem("Remove")) {
+			object.Destroy();
+			selectedObject = nullptr;
 		}
-		*/
+		ImGui::EndPopup();
+	}
 
+	if (node_open) {
 		// Recursively display children
-		for (auto&& child : object.children) { 
+		for (auto&& child : object.children) {
 			DisplaySceneGraph(*child);
 		}
 		ImGui::TreePop();

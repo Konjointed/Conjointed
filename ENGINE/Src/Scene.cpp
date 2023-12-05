@@ -53,6 +53,16 @@ void InitScene(Scene* scene) {
 }
 
 void UpdateScene(Scene* scene, float deltaTime) {
+	// Remove any objects waiting to be destroyed from the scene
+	for (auto it = scene->sceneObjects.begin(); it != scene->sceneObjects.end();) {
+		if ((*it)->IsPendingDesturction()) {
+			it = scene->sceneObjects.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
+
 	if (Viewport::FOCUSED) {
 		scene->camera->Update(deltaTime);
 	}

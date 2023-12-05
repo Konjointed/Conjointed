@@ -19,3 +19,5 @@ end
 function Hero:Ability3() 
 	print("Ability3")
 end
+
+return Hero

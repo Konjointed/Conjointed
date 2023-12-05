@@ -100,14 +100,8 @@ public:
 	std::string name;
 	std::shared_ptr<Model> model = nullptr;
 
-	GameObject() : type(STATICMESH), name("Unnamed GameObject") {
-		std::cout << "Constructing GameObject\n"; 
-	}
-
-	GameObject(std::shared_ptr<Model> model)
-		: model(model), type(SKINNEDMESH), name("Unnamed GameObject") {
-		std::cout << "Constructing GameObject\n";
-	}
+	GameObject();
+	GameObject(std::shared_ptr<Model> model);
 
 	/*
 	template<typename... TArgs>
@@ -116,51 +110,16 @@ public:
 		children.back()->parent = this;
 	}
 	*/
-	void AddChild(std::unique_ptr<GameObject> child) {
-		child->parent = this;
-		children.push_back(std::move(child));
-	}
+	virtual void UpdateSelfAndChild();
+	virtual void DrawSelfAndChild(Shader shader, unsigned int shadowMapTexture = 0);
 
-	virtual void UpdateSelfAndChild() {
-		if (transform.IsDirty()) {
-			ForceUpdateSelfAndChild();
-			return;
-		}
+	void AddChild(std::unique_ptr<GameObject> child);
+	void Destroy();
+	bool IsPendingDesturction() const;
+private:
+	bool pendingDestruction = false;
 
-		for (auto&& child : children)
-		{
-			child->UpdateSelfAndChild();
-		}
-	}
-
-	void ForceUpdateSelfAndChild() {
-		if (parent) {
-			transform.ComputeModelMatrix(parent->transform.GetModelMatrix());
-		}
-		else {
-			transform.ComputeModelMatrix();
-		}
-
-		for (auto&& child : children) {
-			child->ForceUpdateSelfAndChild();
-		}
-	}
-
-	virtual void DrawSelfAndChild(Shader shader, unsigned int shadowMapTexture = 0) {
-		// If this GameObject has a model, draw it
-		if (model != nullptr) {
-			// Set the transformation matrix for this object
-			shader.SetMatrix4("model", transform.GetModelMatrix());
-
-			// Draw the model
-			model->Draw(shader, shadowMapTexture);
-		}
-
-		// Draw all children
-		for (auto&& child : children) {
-			child->DrawSelfAndChild(shader);
-		}
-	}
+	void ForceUpdateSelfAndChild();
 };
 
 #endif 

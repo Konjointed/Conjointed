@@ -10,7 +10,7 @@ class Camera : public GameObject {
 public:
 	float movementSpeed = 1.0f;
 	float nearPlane = 0.1f;
-	float farPlane = 500.0f;
+	float farPlane = 5000.0f;
 	float fov = 45.0f;
 	float aspectRatio = (float)Viewport::VIEWPORT_WIDTH / Viewport::VIEWPORT_HEIGHT;
 
