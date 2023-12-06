@@ -1,4 +1,7 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
+
+#include <iostream>
 
 #include <SDL2/SDL_events.h>
 #include <glm/ext/matrix_transform.hpp>
@@ -41,3 +44,23 @@ private:
 	bool firstMouse = true;
 	float lastX, lastY;
 };
+
+#include <Meta.h>
+
+namespace meta {
+	template <>
+	inline auto registerMembers<Camera>()
+	{
+		return members(
+			member("name", &Camera::name),
+			member("position", &Camera::GetPosition, &Camera::SetPosition),
+			member("speed", &Camera::movementSpeed),
+			member("nearPlane", &Camera::nearPlane),
+			member("farPlane", &Camera::farPlane),
+			member("fov", &Camera::fov),
+			member("ratio", &Camera::aspectRatio)
+		);
+	}
+}
+
+#endif

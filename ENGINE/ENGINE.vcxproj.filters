@@ -171,6 +171,9 @@
     <ClCompile Include="Src\DiscordRichPresence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdParty\tinyfiledialogs\tinyfiledialogs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThirdParty\glad\khrplatform.h">
@@ -359,6 +362,21 @@
     <ClInclude Include="Src\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\metastuff\detail\MetaHolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\metastuff\detail\template_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\metastuff\Member.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\metastuff\Meta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\tinyfiledialogs\tinyfiledialogs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Basic.vert" />
@@ -384,6 +402,15 @@
     <None Include="Resources\Shaders\Shadow2.vert" />
     <None Include="Resources\Shaders\Shadow2.frag" />
     <None Include="Resources\Shaders\Shadow2.geom" />
+    <None Include="ThirdParty\metastuff\detail\template_helpers.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="ThirdParty\metastuff\Member.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="ThirdParty\metastuff\Meta.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\wood.png">

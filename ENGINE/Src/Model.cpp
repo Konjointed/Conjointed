@@ -23,7 +23,9 @@ Model::Model(const std::string& path, bool gamma = false) : gammaCorrection(gamm
 		return;
 	}
 
-	directory = path.substr(0, path.find_last_of('/'));
+	directory = path.substr(0, path.find_last_of("/\\"));
+	std::cout << "LOADING MODEL\n";
+	std::cout << directory << "\n";
 
 	ProcessNode(scene->mRootNode, scene);
 }
@@ -96,7 +98,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 	else {
 		std::cout << "Materials were found for this mesh.\n";
 	}
-
 
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());

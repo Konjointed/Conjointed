@@ -116,10 +116,81 @@ public:
 	void AddChild(std::unique_ptr<GameObject> child);
 	void Destroy();
 	bool IsPendingDesturction() const;
+
+	const glm::vec3& GetPosition() const {
+		return transform.GetLocalPosition();
+	}
+
+	void SetPosition(const glm::vec3& newPos) {
+		transform.SetLocalPosition(newPos);
+	}
+
+	const glm::vec3& GetRotation() const {
+		return transform.GetLocalRotation();
+	}
+
+	void SetRotation(const glm::vec3& newRotation) {
+		transform.SetLocalRotation(newRotation);
+	}
+
+	const glm::vec3& GetScale() const {
+		return transform.GetLocalScale();
+	}
+
+	void SetScale(const glm::vec3& newScale) {
+		transform.SetLocalScale(newScale);
+	}
+
+	const std::string& GetModel() const {
+		return "path/to/model";
+	}
+
+	void SetModel(const std::string& path) {
+		model = std::make_shared<Model>(path, false);
+	}
 private:
 	bool pendingDestruction = false;
 
 	void ForceUpdateSelfAndChild();
 };
+
+#include <Meta.h>
+
+namespace meta {
+	/*
+	template <>
+	inline auto registerMembers<Transform>()
+	{
+		return members(
+			member("position", &Transform::GetLocalPosition, &Transform::SetLocalPosition),
+			member("rotation", &Transform::GetLocalRotation, &Transform::SetLocalRotation),
+			member("scale", &Transform::GetLocalScale, &Transform::SetLocalScale)
+			);
+	}
+
+	template <>
+	inline auto registerMembers<GameObject>()
+	{
+		return std::tuple_cat(
+			meta::getMembers<Transform>(),
+			members(member("name", &GameObject::name))
+			//member("parent", &GameObject::parent),
+			//member("model", &GameObject::model)
+		);
+	}
+	*/
+
+	template <>
+	inline auto registerMembers<GameObject>()
+	{
+		return members(
+			member("position", &GameObject::GetPosition, &GameObject::SetPosition),
+			member("rotation", &GameObject::GetRotation, &GameObject::SetRotation),
+			member("scale", &GameObject::GetScale, &GameObject::SetScale),
+			member("name", &GameObject::name),
+			member("model", &GameObject::GetModel, &GameObject::SetModel)
+		);
+	}
+}
 
 #endif 

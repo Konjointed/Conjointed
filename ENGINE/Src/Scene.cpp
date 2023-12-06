@@ -9,6 +9,11 @@ void InitScene(Scene* scene) {
 	testObject->name = "Workspace";
 	scene->sceneObjects.push_back(testObject);
 
+	auto blankObject = std::make_shared<GameObject>();
+	blankObject->type = SKINNEDMESH;
+	blankObject->name = "New Object";
+	scene->sceneObjects.push_back(blankObject);
+
 	auto cubeModel = std::make_shared<Model>(Model::GenerateCube());
 	auto cubeObject = std::make_unique<GameObject>(cubeModel);
 	cubeObject->type = STATICMESH;

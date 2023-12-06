@@ -2,6 +2,7 @@
 #define APPLICATION_H
 
 #include <vector>
+#include <memory>
 
 class Editor;
 class Window;
@@ -18,7 +19,8 @@ public:
 	void Shutdown();
 private:
 	bool quit;
-	Window* window;
+	//Window* window;
+	std::unique_ptr<Window> window;
 };
 
 #endif 

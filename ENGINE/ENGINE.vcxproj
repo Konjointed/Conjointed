@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>.\Bin</OutDir>
-    <IncludePath>D:\Github\ENGINE\ENGINE\ThirdParty\lua;D:\Github\ENGINE\ENGINE\ThirdParty\SDL2;D:\Github\ENGINE\ENGINE\ThirdParty;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Github\Conjointed\ENGINE\ThirdParty\metastuff;D:\Github\ENGINE\ENGINE\ThirdParty\lua;D:\Github\ENGINE\ENGINE\ThirdParty\SDL2;D:\Github\ENGINE\ENGINE\ThirdParty;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Github\ENGINE\ENGINE\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -110,6 +110,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>D:\Github\Conjointed\ENGINE\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -186,6 +187,7 @@
     <ClCompile Include="ThirdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_widgets.cpp" />
     <ClCompile Include="ThirdParty\Shader.cpp" />
+    <ClCompile Include="ThirdParty\tinyfiledialogs\tinyfiledialogs.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Animation.h" />
@@ -248,8 +250,13 @@
     <ClInclude Include="ThirdParty\imgui\imstb_rectpack.h" />
     <ClInclude Include="ThirdParty\imgui\imstb_textedit.h" />
     <ClInclude Include="ThirdParty\imgui\imstb_truetype.h" />
+    <ClInclude Include="ThirdParty\metastuff\detail\MetaHolder.h" />
+    <ClInclude Include="ThirdParty\metastuff\detail\template_helpers.h" />
+    <ClInclude Include="ThirdParty\metastuff\Member.h" />
+    <ClInclude Include="ThirdParty\metastuff\Meta.h" />
     <ClInclude Include="ThirdParty\Shader.h" />
     <ClInclude Include="ThirdParty\stb_image.h" />
+    <ClInclude Include="ThirdParty\tinyfiledialogs\tinyfiledialogs.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\brickwall.jpg" />
@@ -283,6 +290,9 @@
     <None Include="Resources\Shaders\ShadowMappingDepth.vert" />
     <None Include="Resources\Shaders\Skybox.frag" />
     <None Include="Resources\Shaders\Skybox.vert" />
+    <None Include="ThirdParty\metastuff\detail\template_helpers.inl" />
+    <None Include="ThirdParty\metastuff\Member.inl" />
+    <None Include="ThirdParty\metastuff\Meta.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CmakeLists.txt" />

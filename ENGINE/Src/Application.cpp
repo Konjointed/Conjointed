@@ -12,7 +12,6 @@
 
 #include <iostream>
 #include <algorithm> 
-#include <memory>
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <stb_image.h>
@@ -49,7 +48,7 @@ bool Application::Init() {
 	customSettings.vsync = true;
 
 	int success;
-	window = new Window(success, customSettings);
+	window = std::make_unique<Window>(success, customSettings);
 	if (!success) return false;
 
 	return true;
@@ -166,5 +165,5 @@ int Application::Run() {
 }
 
 void Application::Shutdown() {
-	delete window;
+
 }
