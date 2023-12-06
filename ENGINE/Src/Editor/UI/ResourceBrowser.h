@@ -9,6 +9,7 @@ class TextEdit;
 class ResourceBrowser {
 public:
 	ResourceBrowser();
+	void DisplayDirectoryContents(const std::filesystem::path& directoryPath, TextEdit& textEdit);
 	void Draw(TextEdit& textEdit);
 private:
 };
