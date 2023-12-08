@@ -4,22 +4,29 @@
 #include <list>
 #include <memory>
 #include <iostream>
+#include <array>
+#include <vector>
 
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Shader.h>
 
 #include "Model.h"
-
-//class Model;
+#include "AABB.h"
+#include "Frustum.h"
+#include "IncludeGL.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 
 enum ObjectType {
 	NONE,
-	ROOT,
-	WORKSPACE,
-	LIGHTING,
+	//ROOT,
+	//WORKSPACE,
+	//LIGHTING,
+	SKYBOX,
 	STATICMESH,
 	SKINNEDMESH,    
 };
@@ -96,9 +103,11 @@ public:
 	// Space information
 	Transform transform;
 
-	ObjectType type;
-	std::string name;
+	ObjectType type = NONE;
+	std::string name = "New Object";
 	std::shared_ptr<Model> model = nullptr;
+	std::shared_ptr<AABB> boundingVolume;
+	bool enabled = true;
 
 	GameObject();
 	GameObject(std::shared_ptr<Model> model);
@@ -111,7 +120,7 @@ public:
 	}
 	*/
 	virtual void UpdateSelfAndChild();
-	virtual void DrawSelfAndChild(Shader shader, unsigned int shadowMapTexture = 0);
+	virtual void DrawSelfAndChild(const Frustum& frustum, Shader shader, unsigned int shadowMapTexture, unsigned int& display, unsigned int& total);
 
 	void AddChild(std::unique_ptr<GameObject> child);
 	void Destroy();
@@ -188,6 +197,7 @@ namespace meta {
 			member("rotation", &GameObject::GetRotation, &GameObject::SetRotation),
 			member("scale", &GameObject::GetScale, &GameObject::SetScale),
 			member("name", &GameObject::name),
+			member("enabled", &GameObject::enabled),
 			member("model", &GameObject::GetModel, &GameObject::SetModel)
 		);
 	}

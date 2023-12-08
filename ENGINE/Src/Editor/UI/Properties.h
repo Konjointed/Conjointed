@@ -3,6 +3,7 @@
 
 #include "../../GameObject.h"
 #include "../../Camera.h"
+#include "../../Skybox.h"
 
 struct Scene;
 
@@ -12,6 +13,7 @@ public:
 	~Properties();
 
 	void CameraProperties(Camera* camera);
+	void SkyboxProperties(Skybox* skybox);
 	void ObjectProperties(GameObject* object);
 	void Draw(GameObject* selectedObject, Scene& scene);
 private:

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <Shader.h>
+#include <stb_image.h>
 
 #include "Model.h"
 #include "Mesh.h"
@@ -11,6 +12,8 @@
 Model::Model() {}
 
 Model::Model(const std::string& path, bool gamma = false) : gammaCorrection(gamma)  {
+	stbi_set_flip_vertically_on_load(true);
+
 	// Read file via ASSIMP
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, 
@@ -284,5 +287,54 @@ Model Model::GenerateCube() {
 	Model newModel;
 	newModel.meshes.push_back(Mesh(vertices, indices, textures));
 
+	return newModel;
+}
+
+Model Model::GenerateSphere() {
+	unsigned int rings = 100;
+	unsigned int sectors = 200;
+
+	float R = 1.0f / static_cast<float>(rings - 1);
+	float S = 1.0f / static_cast<float>(sectors - 1);
+	constexpr float PI = 3.14159265358979323846f;
+	constexpr float PI_2 = 1.57079632679489661923f;
+
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+
+	vertices.reserve(rings * sectors);
+	indices.reserve(rings * sectors * 4);
+
+	for (unsigned int r = 0; r < rings; ++r) {
+		for (unsigned int s = 0; s < sectors; ++s) {
+			float y = std::sin(-PI_2 + PI * r * R);
+			float x = std::cos(2 * PI * s * S) * std::sin(PI * r * R);
+			float z = std::sin(2 * PI * s * S) * std::sin(PI * r * R);
+
+			Vertex vertex;
+			vertex.position = glm::vec3(x, y, z);
+			vertex.normal = glm::normalize(vertex.position);
+			// vertex.TexCoords = glm::vec2(s * S, r * R); // Uncomment if texture coordinates are needed
+
+			vertices.push_back(vertex);
+		}
+	}
+
+	for (unsigned int r = 0; r < rings - 1; ++r) {
+		for (unsigned int s = 0; s < sectors - 1; ++s) {
+			indices.push_back(r * sectors + s);
+			indices.push_back(r * sectors + (s + 1));
+			indices.push_back((r + 1) * sectors + (s + 1));
+
+			indices.push_back(r * sectors + s);
+			indices.push_back((r + 1) * sectors + (s + 1));
+			indices.push_back((r + 1) * sectors + s);
+		}
+	}
+
+	Model newModel;
+	newModel.meshes.push_back(Mesh(vertices, indices, std::vector<Texture>()));
+
+	// Assuming textures are not needed for this mesh, an empty vector is passed
 	return newModel;
 }

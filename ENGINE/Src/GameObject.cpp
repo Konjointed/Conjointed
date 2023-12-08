@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "GameObject.h""
 
 GameObject::GameObject() : type(STATICMESH), name("Unnamed GameObject") {
 	std::cout << "Constructing GameObject\n";
@@ -7,6 +7,8 @@ GameObject::GameObject() : type(STATICMESH), name("Unnamed GameObject") {
 GameObject::GameObject(std::shared_ptr<Model> model)
 	: model(model), type(SKINNEDMESH), name("Unnamed GameObject") {
 	std::cout << "Constructing GameObject\n";
+	boundingVolume = std::make_shared<AABB>(generateAABB(*model));
+	//boundingVolume = std::make_shared<AABB>(generateSphereBV(*model));
 }
 
 void GameObject::AddChild(std::unique_ptr<GameObject> child) {
@@ -26,19 +28,18 @@ void GameObject::UpdateSelfAndChild() {
 	}
 }
 
-void GameObject::DrawSelfAndChild(Shader shader, unsigned int shadowMapTexture) {
-	// If this GameObject has a model, draw it
+void GameObject::DrawSelfAndChild(const Frustum& frustum, Shader shader, unsigned int shadowMapTexture, unsigned int& display, unsigned int& total) {
 	if (model != nullptr) {
-		// Set the transformation matrix for this object
-		shader.SetMatrix4("model", transform.GetModelMatrix());
-
-		// Draw the model
-		model->Draw(shader, shadowMapTexture);
+		if (boundingVolume->IsOnFrustum(frustum, transform)) {
+			shader.SetMatrix4("model", transform.GetModelMatrix());
+			model->Draw(shader, shadowMapTexture);
+			display++;
+		}
 	}
+	total++;
 
-	// Draw all children
 	for (auto&& child : children) {
-		child->DrawSelfAndChild(shader);
+		child->DrawSelfAndChild(frustum, shader, 0, display, total);
 	}
 }
 

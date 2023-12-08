@@ -38,6 +38,7 @@ public:
 
 	static Model GeneratePlane();
 	static Model GenerateCube();
+	static Model GenerateSphere();
 private:
 	std::map<std::string, BoneInfo> boneInfoMap;
 	int boneCounter = 0;

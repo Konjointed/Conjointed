@@ -16,6 +16,20 @@ void SceneGraph::Draw(Scene& scene) {
 		for (auto& object : scene.sceneObjects) {
 			DisplaySceneGraph(*object);
 		}
+
+		if (ImGui::IsMouseClicked(1) && ImGui::IsWindowHovered()) {
+			ImGui::OpenPopup("RightClickMenu");
+		}
+
+		// Example of a simple context menu
+		if (ImGui::BeginPopup("RightClickMenu")) {
+			if (ImGui::MenuItem("Add Object")) {
+				// Handle Option 1
+				AddObject(&scene);
+			}
+			ImGui::EndPopup();
+		}
+
 	}
 	ImGui::End();
 }

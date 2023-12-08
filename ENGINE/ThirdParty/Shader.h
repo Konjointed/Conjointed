@@ -9,17 +9,34 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "../Src/IncludeGL.h"
+
 class Shader
 {
 public:
     // state
     unsigned int ID;
+    std::string vertexPath, fragmentPath, geometryPath;
     // constructor
-    Shader() { }
+    Shader() {}
     // sets the current shader as active
     Shader& Use();
     // compiles the shader from given source code
     void    Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource = nullptr); // note: geometry source code is optional 
+    void Recompile(const char* vertexSource, const char* fragmentSource, const char* geometrySource = nullptr)
+    {
+        // Clean up the existing shader program if necessary
+        // ...
+
+        // Compile the new shader
+        Compile(vertexSource, fragmentSource, geometrySource);
+    }
+    void SetFilePaths(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "")
+    {
+        vertexPath = vsPath;
+        fragmentPath = fsPath;
+        geometryPath = gsPath;
+    }
     // utility functions
     void    SetFloat(const char* name, float value, bool useShader = false);
     void    SetInteger(const char* name, int value, bool useShader = false);

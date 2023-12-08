@@ -7,7 +7,15 @@
 #include "Texture.h"
 #include "ResourceManager.h"
 
-Skybox::Skybox() {
+Skybox::Skybox()
+    : textureRight("Resources/Textures/skybox/right.jpg"),
+    textureLeft("Resources/Textures/skybox/left.jpg"),
+    textureTop("Resources/Textures/skybox/bottom.jpg"),
+    textureBottom("Resources/Textures/skybox/top.jpg"),
+    textureFront("Resources/Textures/skybox/front.jpg"),
+    textureBack("Resources/Textures/skybox/back.jpg"),
+    texturesUpdated(true)
+{
     vertices = {
         // positions          
         -1.0f,  1.0f, -1.0f,
@@ -71,12 +79,11 @@ Skybox::~Skybox() {
 
 }
 
-void Skybox::Draw(glm::mat4 view, glm::mat4 projection) {
-    view = glm::mat4(glm::mat3(view)); // remove translation from the view matrix
-
-    ResourceManager::GetShader("skybox").Use();
-    ResourceManager::GetShader("skybox").SetMatrix4("view", view);
-    ResourceManager::GetShader("skybox").SetMatrix4("projection", projection);
+void Skybox::DrawSelfAndChild(const Frustum& frustum, Shader shader, unsigned int shadowMapTexture, unsigned int& display, unsigned int& total) {
+    if (texturesUpdated) {
+        UpdateTexture();
+        texturesUpdated = false; // Reset the flag
+    }
 
     glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
     glBindVertexArray(vao);

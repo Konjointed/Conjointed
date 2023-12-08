@@ -13,7 +13,7 @@ class GameObject;
 struct Scene {
 	std::vector<std::shared_ptr<GameObject>> sceneObjects;
 	std::shared_ptr<Camera> camera;
-	std::shared_ptr<Skybox> skybox;
+	//std::shared_ptr<Skybox> skybox;
 
 	Animation* idleAnimation;
 	Animator* animator;
@@ -26,6 +26,8 @@ struct Scene {
 
 	bool wireframe = false;
 };
+
+void AddObject(Scene* scene);
 
 void InitScene(Scene* scene);
 

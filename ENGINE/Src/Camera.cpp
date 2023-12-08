@@ -22,8 +22,8 @@ void Camera::UpdateSelfAndChild() {
     GameObject::UpdateSelfAndChild(); 
 }
 
-void Camera::DrawSelfAndChild(Shader shader, unsigned int shadowMapTexture) {
-    GameObject::DrawSelfAndChild(shader, 0); 
+void Camera::DrawSelfAndChild(const Frustum& frustum, Shader shader, unsigned int shadowMapTexture, unsigned int& display, unsigned int& total) {
+    GameObject::DrawSelfAndChild(frustum, shader, shadowMapTexture, display, total);
 }
 
 void Camera::ProcessKeyboard(float deltaTime) {

@@ -24,9 +24,9 @@ layout (std140) uniform LightSpaceMatrices
 uniform float cascadePlaneDistances[16];
 uniform int cascadeCount;   // number of frusta - 1
 
-float ShadowCalculation(vec3 fragPosWorldSpace)
-{
-    // select cascade layer
+uniform vec3 cameraPosition;
+
+int SelectCascadeLayer(vec3 fragPosWorldSpace) {
     vec4 fragPosViewSpace = view * vec4(fragPosWorldSpace, 1.0);
     float depthValue = abs(fragPosViewSpace.z);
 
@@ -44,6 +44,14 @@ float ShadowCalculation(vec3 fragPosWorldSpace)
         layer = cascadeCount;
     }
 
+    return layer;
+}
+
+float ShadowCalculation(vec3 fragPosWorldSpace)
+{
+    // select cascade layer
+    int layer = SelectCascadeLayer(fragPosWorldSpace);
+
     vec4 fragPosLightSpace = lightSpaceMatrices[layer] * vec4(fragPosWorldSpace, 1.0);
     // perform perspective divide
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -60,8 +68,7 @@ float ShadowCalculation(vec3 fragPosWorldSpace)
     }
     // calculate bias (based on depth map resolution and slope)
     vec3 normal = normalize(fs_in.Normal);
-    //float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-    float bias = max(0.2 * (1.0 - dot(normal, lightDir)), 0.05);
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
     const float biasModifier = 0.5f;
     if (layer == cascadeCount)
     {
@@ -88,6 +95,7 @@ float ShadowCalculation(vec3 fragPosWorldSpace)
     return shadow;
 }
 
+
 void main()
 {           
     vec3 color = texture(texture_diffuse1, fs_in.TexCoords).rgb;
@@ -110,5 +118,19 @@ void main()
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
     
     FragColor = vec4(lighting, 1.0);
+
+    // DEBUG
+    /*
+    int layer = SelectCascadeLayer(fs_in.FragPos);
+
+    if (layer == 0) {
+    FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red for closest
+    } else if (layer == 1) {
+    FragColor = vec4(1.0, 1.0, 0.0, 1.0); // Yellow for medium
+    } else {
+    FragColor = vec4(0.0, 0.0, 1.0, 1.0); // Blue for furthest
+    }
+    */
 }
+
 

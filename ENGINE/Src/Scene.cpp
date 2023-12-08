@@ -1,7 +1,16 @@
+#include <stb_image.h>
+
 #include "Scene.h"
 #include "GameObject.h"
 #include "Camera.h"
 #include "Texture.h"
+
+void AddObject(Scene* scene) {
+	auto blankObject = std::make_shared<GameObject>();
+	blankObject->type = STATICMESH;
+	blankObject->name = "New Object";
+	scene->sceneObjects.push_back(blankObject);
+}
 
 void InitScene(Scene* scene) {
 	auto testObject = std::make_shared<GameObject>();
@@ -9,10 +18,11 @@ void InitScene(Scene* scene) {
 	testObject->name = "Workspace";
 	scene->sceneObjects.push_back(testObject);
 
-	auto blankObject = std::make_shared<GameObject>();
-	blankObject->type = SKINNEDMESH;
-	blankObject->name = "New Object";
-	scene->sceneObjects.push_back(blankObject);
+	auto sphereModel = std::make_shared<Model>(Model::GenerateSphere());
+	auto sphereObject = std::make_unique<GameObject>(sphereModel);
+	sphereObject->type = STATICMESH;
+	sphereObject->name = "Sphere";
+	scene->sceneObjects.push_back(std::move(sphereObject));
 
 	auto cubeModel = std::make_shared<Model>(Model::GenerateCube());
 	auto cubeObject = std::make_unique<GameObject>(cubeModel);
@@ -38,14 +48,16 @@ void InitScene(Scene* scene) {
 	scene->sceneObjects.push_back(std::move(planeObject));
 	//testObject->AddChild(std::move(planeObject));
 
+	/*
 	auto playerModel = std::make_shared<Model>("Resources/Models/Maria/Maria J J Ong.dae", false);
 	auto playerObject = std::make_shared<GameObject>(playerModel);
-	playerObject->type = SKINNEDMESH;
+	playerObject->type = STATICMESH;
 	playerObject->name = "Player";
 	scene->sceneObjects.push_back(playerObject);
 
 	scene->idleAnimation = new Animation("Resources/Animations/Idle.dae", playerModel.get());
 	scene->animator = new Animator(scene->idleAnimation);
+	*/
 
 	auto cameraObject = std::make_shared<Camera>();
 	cameraObject->type = STATICMESH;
@@ -53,8 +65,13 @@ void InitScene(Scene* scene) {
 	scene->sceneObjects.push_back(cameraObject);
 	scene->camera = cameraObject;
 
+	stbi_set_flip_vertically_on_load(false);
+
 	auto skyboxObject = std::make_shared<Skybox>();
-	scene->skybox = skyboxObject;
+	skyboxObject->type = SKYBOX;
+	skyboxObject->name = "Skybox";
+	scene->sceneObjects.push_back(skyboxObject);
+	//scene->skybox = skyboxObject;
 }
 
 void UpdateScene(Scene* scene, float deltaTime) {

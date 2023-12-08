@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <limits>
 
 //#include <glm/ext/matrix_clip_space.hpp>
 #include <glm/mat4x4.hpp>
@@ -68,6 +69,9 @@ Renderer::~Renderer() {}
 void Renderer::Render(Window& window, Scene& scene) {
 	shadowCascadeLevels = { scene.camera->farPlane / 50.0f, scene.camera->farPlane / 25.0f, scene.camera->farPlane / 10.0f, scene.camera->farPlane / 2.0f };
 
+	unsigned int total = 0, display = 0;
+	const Frustum camFrustum = createFrustumFromCamera(*scene.camera.get(), (float)window.GetWidth() / (float)window.GetHeight(), glm::radians(scene.camera->fov), 0.1f, 100.0f);
+
 	if (scene.wireframe) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
@@ -99,8 +103,16 @@ void Renderer::Render(Window& window, Scene& scene) {
 	glCullFace(GL_FRONT); // peter panning
 
 	for (auto& object : scene.sceneObjects) {
+		if (!object->enabled) {
+			continue; 
+		}
+
+		if (object->type == SKYBOX) {
+			continue;
+		}
+
 		object->UpdateSelfAndChild();
-		object->DrawSelfAndChild(ResourceManager::GetShader("shadow2"));
+		object->DrawSelfAndChild(camFrustum, ResourceManager::GetShader("shadow2"), 0, display, total);
 	}
 
 	glCullFace(GL_BACK);
@@ -123,13 +135,17 @@ void Renderer::Render(Window& window, Scene& scene) {
 	glm::mat4 view = scene.camera->GetViewMatrix();
 
 	for (auto& object : scene.sceneObjects) {
-		Shader shader = (object->type == STATICMESH) ?
-			ResourceManager::GetShader("scene") :
-			ResourceManager::GetShader("model");
+		if (!object->enabled || object->type == SKYBOX) {
+			continue; 
+		}
+
+		Shader shader;
 
 		object->UpdateSelfAndChild();
 
 		if (object->type == STATICMESH) {
+			shader = ResourceManager::GetShader("scene");
+
 			shader.Use();
 			shader.SetMatrix4("projection", projection);
 			shader.SetMatrix4("view", view);
@@ -137,6 +153,7 @@ void Renderer::Render(Window& window, Scene& scene) {
 			shader.SetVector3f("lightDir", scene.lightDirection);
 			shader.SetFloat("farPlane", scene.camera->farPlane);
 			shader.SetInteger("cascadeCount", shadowCascadeLevels.size());
+			shader.SetVector3f("cameraPosition", scene.camera->GetPosition());
 			for (size_t i = 0; i < shadowCascadeLevels.size(); ++i)
 			{
 				std::string uniformName = "cascadePlaneDistances[" + std::to_string(i) + "]";
@@ -144,6 +161,8 @@ void Renderer::Render(Window& window, Scene& scene) {
 			}
 		}
 		else if (object->type == SKINNEDMESH) {
+			shader = ResourceManager::GetShader("model");
+
 			shader.Use();
 			shader.SetMatrix4("projection", projection);
 			shader.SetMatrix4("view", view);
@@ -155,10 +174,20 @@ void Renderer::Render(Window& window, Scene& scene) {
 			}
 		}
 
-		object->DrawSelfAndChild(shader, lightDepthMaps);
+		object->DrawSelfAndChild(camFrustum, shader, lightDepthMaps, display, total);
+		//std::cout << "Total process in CPU : " << total << " / Total send to GPU : " << display << std::endl;
 	}
 
-	scene.skybox->Draw(view, projection);
+	for (auto& object : scene.sceneObjects) {
+		if (object->enabled && object->type == SKYBOX) {
+			Shader shader = ResourceManager::GetShader("skybox");
+			glm::mat4 viewNoTranslation = glm::mat4(glm::mat3(view)); // remove translation from the view matrix
+			shader.Use();
+			shader.SetMatrix4("view", viewNoTranslation);
+			shader.SetMatrix4("projection", projection);
+			object->DrawSelfAndChild(camFrustum, shader, lightDepthMaps, display, total);
+		}
+	}
 
 	if (scene.wireframe) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

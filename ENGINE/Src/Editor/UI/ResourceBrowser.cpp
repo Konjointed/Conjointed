@@ -6,6 +6,7 @@
 #include "ResourceBrowser.h"
 #include "../Editor.h"
 
+/*
 std::string ImportFileDialog() {
     char* filePath = tinyfd_openFileDialog(
         "Import File",
@@ -19,6 +20,16 @@ std::string ImportFileDialog() {
     if (filePath) {
         return std::string(filePath);
     }
+    return "";
+}
+*/
+std::string ImportFileDialog() {
+    char* folderPath = tinyfd_selectFolderDialog("Select Folder", "");
+
+    if (folderPath) {
+        return std::string(folderPath);
+    }
+
     return "";
 }
 
@@ -45,6 +56,9 @@ void ResourceBrowser::DisplayDirectoryContents(const std::filesystem::path& dire
                 std::string fileExtension = entry.path().extension().string();
                 if (ImGui::Selectable(fileName.c_str(), false)) {
                     if (fileExtension == ".lua") {
+                        textEdit.Open(entry.path().string());
+                    }
+                    else if (fileExtension == ".vert" || fileExtension == ".frag" || fileExtension == ".geom") {
                         textEdit.Open(entry.path().string());
                     }
                 }
@@ -114,10 +128,13 @@ void ResourceBrowser::Draw(TextEdit& textEdit) {
                         std::fill(std::begin(fileNameBuffer), std::end(fileNameBuffer), 0);
                     }
                     if (ImGui::MenuItem("Import File")) {
-                        std::string importedFilePath = ImportFileDialog();
-                        if (!importedFilePath.empty()) {
-                            // Copy the imported file to the current directory
-                            std::filesystem::copy(importedFilePath, entry.path());
+                        std::string importedFolderPath = ImportFileDialog();
+                        if (!importedFolderPath.empty()) {
+                            // Determine the destination path
+                            std::filesystem::path destination = entry.path() / std::filesystem::path(importedFolderPath).filename();
+
+                            // Copy the entire directory tree
+                            std::filesystem::copy(importedFolderPath, destination, std::filesystem::copy_options::recursive);
                         }
                     }
                     ImGui::EndPopup();

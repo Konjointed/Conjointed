@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "../Src/IncludeGL.h"
-
 Shader& Shader::Use()
 {
     glUseProgram(this->ID);
@@ -100,7 +98,6 @@ void Shader::SetMatrix4(const char* name, const glm::mat4& matrix, bool useShade
         this->Use();
     glUniformMatrix4fv(glGetUniformLocation(this->ID, name), 1, false, glm::value_ptr(matrix));
 }
-
 
 void Shader::checkCompileErrors(unsigned int object, std::string type)
 {

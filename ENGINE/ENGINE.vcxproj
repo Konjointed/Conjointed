@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\AABB.cpp" />
     <ClCompile Include="Src\Animation.cpp" />
     <ClCompile Include="Src\Animator.cpp" />
     <ClCompile Include="Src\Application.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="Src\Editor\UI\SceneGraph.cpp" />
     <ClCompile Include="Src\Editor\UI\TextEdit.cpp" />
     <ClCompile Include="Src\Editor\UI\Viewport.cpp" />
+    <ClCompile Include="Src\Frustum.cpp" />
     <ClCompile Include="Src\GameObject.cpp" />
     <ClCompile Include="Src\Editor\Editor.cpp" />
     <ClCompile Include="Src\Main.cpp" />
@@ -190,6 +192,7 @@
     <ClCompile Include="ThirdParty\tinyfiledialogs\tinyfiledialogs.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\AABB.h" />
     <ClInclude Include="Src\Animation.h" />
     <ClInclude Include="Src\AnimationData.h" />
     <ClInclude Include="Src\Animator.h" />
@@ -208,6 +211,7 @@
     <ClInclude Include="Src\Editor\UI\SceneGraph.h" />
     <ClInclude Include="Src\Editor\UI\TextEdit.h" />
     <ClInclude Include="Src\Editor\UI\Viewport.h" />
+    <ClInclude Include="Src\Frustum.h" />
     <ClInclude Include="Src\GameObject.h" />
     <ClInclude Include="Src\Editor\Editor.h" />
     <ClInclude Include="Src\IncludeGL.h" />
@@ -218,6 +222,7 @@
     <ClInclude Include="Src\Renderer.h" />
     <ClInclude Include="Src\ResourceManager.h" />
     <ClInclude Include="Src\Scene.h" />
+    <ClInclude Include="Src\ShaderReloader.h" />
     <ClInclude Include="Src\Skybox.h" />
     <ClInclude Include="Src\Texture.h" />
     <ClInclude Include="Src\Window.h" />
@@ -262,8 +267,16 @@
     <Image Include="Resources\Textures\brickwall.jpg" />
     <Image Include="Resources\Textures\container.png" />
     <Image Include="Resources\Textures\container_specular.png" />
+    <Image Include="Resources\Textures\left.jpg" />
     <Image Include="Resources\Textures\missing1.png" />
     <Image Include="Resources\Textures\missing2.png" />
+    <Image Include="Resources\Textures\Skybox.jpg" />
+    <Image Include="Resources\Textures\skybox\back.jpg" />
+    <Image Include="Resources\Textures\skybox\bottom.jpg" />
+    <Image Include="Resources\Textures\skybox\front.jpg" />
+    <Image Include="Resources\Textures\skybox\left.jpg" />
+    <Image Include="Resources\Textures\skybox\right.jpg" />
+    <Image Include="Resources\Textures\skybox\top.jpg" />
     <Image Include="Resources\Textures\wood.png" />
   </ItemGroup>
   <ItemGroup>

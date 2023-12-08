@@ -10,6 +10,7 @@
 	https://github.com/nlguillemot/dof/blob/master/viewer/renderer.cpp
 */
 
+#include <windows.h>
 #include <iostream>
 #include <algorithm> 
 
@@ -66,6 +67,7 @@ int Application::Run() {
 	ResourceManager::LoadTexture("Resources/Textures/wood.png", "wood");
 	ResourceManager::LoadTexture("Resources/Textures/brickwall.jpg", "brick");
 
+	/*
 	ResourceManager::LoadCubemap({
 		"Resources/Textures/skybox/right.jpg",
 		"Resources/Textures/skybox/left.jpg",
@@ -74,8 +76,7 @@ int Application::Run() {
 		"Resources/Textures/skybox/front.jpg",
 		"Resources/Textures/skybox/back.jpg",
 		}, "skybox");
-
-	stbi_set_flip_vertically_on_load(true);
+	*/
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -95,7 +96,30 @@ int Application::Run() {
 	float currentTime = SDL_GetTicks();
 	float accumulator = 0.0f;
 
+	HANDLE hDir = FindFirstChangeNotificationA(
+		"Resources/Shaders", // Directory to monitor
+		FALSE,                      // Do not monitor the subtree
+		FILE_NOTIFY_CHANGE_LAST_WRITE // Watch for changes in file write times
+	);
+
+	if (hDir == INVALID_HANDLE_VALUE)
+	{
+		// Handle error condition
+	}
+
 	while (!quit) {
+		DWORD dwWaitStatus = WaitForSingleObject(hDir, 0);
+
+		if (dwWaitStatus == WAIT_OBJECT_0) {
+			std::cout << "Change Detected\n";
+
+			for (const auto& shaderPair : ResourceManager::shaders) {
+				ResourceManager::ReloadShader(shaderPair.first);
+			}
+
+			FindNextChangeNotification(hDir); // Prepare for next notification
+		}
+
 		float newTime = SDL_GetTicks();
 		float frameTime = newTime - currentTime;
 		currentTime = newTime;

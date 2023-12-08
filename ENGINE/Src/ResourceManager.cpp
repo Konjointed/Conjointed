@@ -12,11 +12,13 @@
 std::map<std::string, Texture> ResourceManager::textures;
 std::map<std::string, Shader> ResourceManager::shaders;
 std::map<std::string, Model> ResourceManager::models;
+std::map<std::string, std::tuple<std::string, std::string, std::string>> ResourceManager::shaderFilePaths;
 
 // SHADERS
 Shader ResourceManager::LoadShader(std::string vsPath, std::string fsPath, std::string gsPath, std::string name) {
     shaders[name] = LoadShaderFromFile(vsPath, fsPath, gsPath);
-	return shaders[name];
+    shaderFilePaths[name] = std::make_tuple(vsPath, fsPath, gsPath);
+    return shaders[name];
 }
 Shader ResourceManager::GetShader(std::string name) {
 	return shaders[name];
