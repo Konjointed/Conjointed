@@ -13,6 +13,10 @@
 #include "Scene.h"
 #include "GameObject.h"
 
+void Test(Model& model, const glm::vec3& position, Shader& shader) {
+	model.Draw(shader, 0);
+}
+
 Renderer::Renderer(Window& window, Scene& scene) {
 	shadowCascadeLevels = { scene.camera->farPlane / 50.0f, scene.camera->farPlane / 25.0f, scene.camera->farPlane / 10.0f, scene.camera->farPlane / 2.0f };
 
@@ -175,7 +179,33 @@ void Renderer::Render(Window& window, Scene& scene) {
 		}
 
 		object->DrawSelfAndChild(camFrustum, shader, lightDepthMaps, display, total);
-		//std::cout << "Total process in CPU : " << total << " / Total send to GPU : " << display << std::endl;
+		std::cout << "Total process in CPU : " << total << " / Total send to GPU : " << display << std::endl;
+
+		if (object->type == STATICMESH) {
+			if (object->boundingVolume != nullptr) {
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glDepthMask(GL_FALSE); // Disable depth writes for translucent object
+
+				// Frustum culling check
+				bool isCulled = !object->boundingVolume->IsOnFrustum(camFrustum, object->transform);
+
+				// Choose color based on culling result
+				glm::vec3 color = isCulled ? glm::vec3(1.0f, 0.0f, 0.0f) : glm::vec3(0.0f, 1.0f, 0.0f);
+
+				shader = ResourceManager::GetShader("translucent");
+				shader.Use();
+				shader.SetMatrix4("projection", projection);
+				shader.SetMatrix4("view", view);
+				shader.SetMatrix4("model", object->transform.GetModelMatrix());
+				shader.SetVector3f("uColor", color); // Set color based on culling
+				shader.SetFloat("uTransparency", 0.5f); // Set desired transparency
+
+				Test(*scene.debugSphere.get(), object->transform.GetLocalPosition(), shader);
+
+				glDepthMask(GL_TRUE); // Re-enable depth writes after rendering translucent object
+			}
+		}
 	}
 
 	for (auto& object : scene.sceneObjects) {

@@ -303,6 +303,8 @@
     <None Include="Resources\Shaders\ShadowMappingDepth.vert" />
     <None Include="Resources\Shaders\Skybox.frag" />
     <None Include="Resources\Shaders\Skybox.vert" />
+    <None Include="Resources\Shaders\Translucent.frag" />
+    <None Include="Resources\Shaders\Translucent.vert" />
     <None Include="ThirdParty\metastuff\detail\template_helpers.inl" />
     <None Include="ThirdParty\metastuff\Member.inl" />
     <None Include="ThirdParty\metastuff\Meta.inl" />

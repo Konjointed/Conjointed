@@ -63,6 +63,7 @@ int Application::Run() {
 	ResourceManager::LoadShader("Resources/Shaders/Scene.vert", "Resources/Shaders/Scene.frag", "", "scene");
 	ResourceManager::LoadShader("Resources/Shaders/Shadow.vert", "Resources/Shaders/Shadow.frag", "", "shadow");
 	ResourceManager::LoadShader("Resources/Shaders/Shadow2.vert", "Resources/Shaders/Shadow2.frag", "Resources/Shaders/Shadow2.geom", "shadow2");
+	ResourceManager::LoadShader("Resources/Shaders/Translucent.vert", "Resources/Shaders/Translucent.frag", "", "translucent");
 
 	ResourceManager::LoadTexture("Resources/Textures/wood.png", "wood");
 	ResourceManager::LoadTexture("Resources/Textures/brickwall.jpg", "brick");

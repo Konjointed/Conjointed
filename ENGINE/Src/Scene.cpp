@@ -13,16 +13,20 @@ void AddObject(Scene* scene) {
 }
 
 void InitScene(Scene* scene) {
+	scene->debugSphere = std::make_shared<Model>(Model::GenerateSphere());
+
 	auto testObject = std::make_shared<GameObject>();
 	testObject->type = STATICMESH;
 	testObject->name = "Workspace";
 	scene->sceneObjects.push_back(testObject);
 
+	/*
 	auto sphereModel = std::make_shared<Model>(Model::GenerateSphere());
 	auto sphereObject = std::make_unique<GameObject>(sphereModel);
 	sphereObject->type = STATICMESH;
 	sphereObject->name = "Sphere";
 	scene->sceneObjects.push_back(std::move(sphereObject));
+	*/
 
 	auto cubeModel = std::make_shared<Model>(Model::GenerateCube());
 	auto cubeObject = std::make_unique<GameObject>(cubeModel);

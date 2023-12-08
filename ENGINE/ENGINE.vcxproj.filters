@@ -426,6 +426,8 @@
     <None Include="ThirdParty\metastuff\Meta.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Resources\Shaders\Translucent.frag" />
+    <None Include="Resources\Shaders\Translucent.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\wood.png">
